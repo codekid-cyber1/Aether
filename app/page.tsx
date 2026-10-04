@@ -84,8 +84,8 @@ export default function CanvasSequence() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "+=300%",
-          scrub: 0.5,
+          end: "+=350%",
+          scrub: 1.2, // Smoother damping for silky scroll interaction
           pin: true,
         }
       });
@@ -106,41 +106,42 @@ export default function CanvasSequence() {
         }
       }, 0); // start at time/frame 0
 
-      // 2. Heading Fade-out (Frames 0 to 15)
+      // 2. Heading Fade-out (Frames 0 to 18) — Gentle lift & fade
       masterTl.to(headingRef.current, {
         opacity: 0,
-        y: -50,
-        ease: "power2.inOut",
-        duration: 15
+        y: -30,
+        ease: "power1.inOut",
+        duration: 18,
+        force3D: true,
       }, 0);
 
-      // 3. Message 1 (Frames 25 to 55)
+      // 3. Message 1 (Frames 20 to 64) — Soft glide-in with depth
       masterTl.fromTo(msg1Ref.current, 
-        { opacity: 0, y: 50 }, 
-        { opacity: 1, y: 0, duration: 8, ease: "power2.out" }, 
-        25
+        { opacity: 0, y: 35, scale: 0.98 }, 
+        { opacity: 1, y: 0, scale: 1, duration: 18, ease: "power1.inOut", force3D: true }, 
+        20
       );
       masterTl.to(msg1Ref.current, 
-        { opacity: 0, y: -50, duration: 8, ease: "power2.in" }, 
-        47
-      ); // 25 (start) + 22 (wait) = 47
+        { opacity: 0, y: -25, scale: 1.01, duration: 14, ease: "power1.inOut", force3D: true }, 
+        50
+      );
 
-      // 4. Message 2 (Frames 60 to 90)
+      // 4. Message 2 (Frames 64 to 102) — Seamless editorial entrance
       masterTl.fromTo(msg2Ref.current, 
-        { opacity: 0, y: 50 }, 
-        { opacity: 1, y: 0, duration: 8, ease: "power2.out" }, 
-        60
+        { opacity: 0, y: 35, scale: 0.98 }, 
+        { opacity: 1, y: 0, scale: 1, duration: 18, ease: "power1.inOut", force3D: true }, 
+        64
       );
       masterTl.to(msg2Ref.current, 
-        { opacity: 0, y: -50, duration: 8, ease: "power2.in" }, 
-        82
+        { opacity: 0, y: -25, scale: 1.01, duration: 14, ease: "power1.inOut", force3D: true }, 
+        88
       );
 
-      // 5. Message 3 (Frames 95 to 119)
+      // 5. Message 3 (Frames 100 to 120) — Grand finale apex reveal
       masterTl.fromTo(msg3Ref.current, 
-        { opacity: 0, y: 50 }, 
-        { opacity: 1, y: 0, duration: 8, ease: "power2.out" }, 
-        95
+        { opacity: 0, y: 35, scale: 0.98 }, 
+        { opacity: 1, y: 0, scale: 1, duration: 20, ease: "power1.inOut", force3D: true }, 
+        100
       );
 
     }, containerRef); // Scope all selectors to our container
@@ -259,7 +260,7 @@ export default function CanvasSequence() {
 
           {/* Initial heading — Phase 1 Hero */}
           <div ref={headingLoadRef} className="absolute inset-0 flex flex-col items-start justify-end" style={{ padding: '0 6% 10%' }}>
-            <div ref={headingRef} className="flex flex-col items-start" style={{ maxWidth: '680px' }}>
+            <div ref={headingRef} className="flex flex-col items-start" style={{ maxWidth: '680px', willChange: 'transform, opacity' }}>
 
               {/* Category label */}
               <span style={{
@@ -328,7 +329,7 @@ export default function CanvasSequence() {
           <div
             ref={msg1Ref}
             className="absolute inset-0"
-            style={{ opacity: 0 }}
+            style={{ opacity: 0, willChange: 'transform, opacity' }}
           >
             {/* Main content — vertically centered, full bleed */}
             <div style={{
@@ -457,7 +458,7 @@ export default function CanvasSequence() {
           <div
             ref={msg2Ref}
             className="absolute inset-0"
-            style={{ opacity: 0 }}
+            style={{ opacity: 0, willChange: 'transform, opacity' }}
           >
             {/* Right-anchored editorial layout */}
             <div style={{
@@ -523,7 +524,7 @@ export default function CanvasSequence() {
             <div
               ref={msg3Ref}
               className="flex flex-col items-center"
-              style={{ opacity: 0, maxWidth: '820px' }}
+              style={{ opacity: 0, maxWidth: '820px', willChange: 'transform, opacity' }}
             >
 
               {/* Main headline */}
