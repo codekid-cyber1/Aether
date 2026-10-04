@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# render sequences / frames (excluded to keep repo size light, keeping only the first frame)
+/public/sequence/*
+!/public/sequence/0001.png
+/public/frames/*
+!/public/frames/0001.png

@@ -1,26 +1,555 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────
+   Custom Fonts
+───────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Gendy';
+  src: url('/Gendy.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-gendy {
+  font-family: 'Gendy', sans-serif;
+}
+
+
+/* ─────────────────────────────────────────────────
+   Design tokens
+───────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-page:        #1e2022;
+  --bg-card:        #252729;
+  --bg-header:      #1a1c1e;
+  --bg-body:        #23252a;
+  --bg-hero:        #0e1014;
+  --bg-project:     #16181c;
+  --bg-gallery:     #0d0f11;
+  --border-subtle:  rgba(255,255,255,0.07);
+  --border-light:   rgba(255,255,255,0.13);
+  --text-primary:   #f0f0ee;
+  --text-muted:     #7a8390;
+  --text-dim:       #454c55;
+  --accent-cta:     #e6e6e4;
+  --radius-card:    20px;
+  --radius-inner:   14px;
+  --radius-thumb:   12px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─────────────────────────────────────────────────
+   Reset / Base
+───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: var(--font-hanken-grotesk), system-ui, -apple-system, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+img { max-width: 100%; display: block; }
+a { text-decoration: none; }
+button, a { cursor: pointer; }
+
+/* ─────────────────────────────────────────────────
+   Page root — full-width, centred, padded
+───────────────────────────────────────────────── */
+.aether-root {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+  background: var(--bg-page);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─────────────────────────────────────────────────
+   Outer card — the rounded dashboard frame
+───────────────────────────────────────────────── */
+.aether-card {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0;
+  overflow: hidden;
+  border: none;
+  box-shadow: none;
+  min-height: 100vh;
 }
+
+/* ─────────────────────────────────────────────────
+   Header
+───────────────────────────────────────────────── */
+.aether-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  height: 52px;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.aether-logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.aether-logo-icon {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.aether-logo-text {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: var(--text-primary);
+}
+
+.aether-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.aether-nav-link {
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  transition: color 0.18s ease;
+}
+.aether-nav-link:hover { color: var(--text-primary); }
+.aether-nav-link--active {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.aether-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.aether-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,0.04);
+  color: var(--text-muted);
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+.aether-icon-btn:hover {
+  border-color: var(--border-light);
+  color: var(--text-primary);
+}
+
+.aether-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #3a3d42;
+  border: 1px solid var(--border-light);
+}
+
+/* ─────────────────────────────────────────────────
+   Body (content area)
+───────────────────────────────────────────────── */
+.aether-body {
+  background: var(--bg-body);
+  padding: 36px 48px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ─────────────────────────────────────────────────
+   Hero section
+───────────────────────────────────────────────── */
+.aether-hero {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  border-radius: var(--radius-inner);
+  overflow: hidden;
+  min-height: 300px;
+  background: var(--bg-hero);
+  border: 1px solid var(--border-subtle);
+}
+
+.aether-hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 44px;
+}
+
+.aether-hero-title {
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.aether-hero-sub {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  max-width: 300px;
+  margin-bottom: 26px;
+}
+
+.aether-cta {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 8px 16px;
+  border-radius: 4px;
+  background: var(--accent-cta);
+  color: #111;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  border: none;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.aether-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.aether-hero-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 220px;
+}
+
+/* ─────────────────────────────────────────────────
+   Section wrapper
+───────────────────────────────────────────────── */
+.aether-section { display: flex; flex-direction: column; gap: 16px; }
+
+.aether-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 4px;
+}
+
+.aether-section-link {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  transition: color 0.18s ease;
+}
+.aether-section-link:hover { color: var(--text-primary); }
+
+/* ─────────────────────────────────────────────────
+   Projects grid  (3 cards + 1 new = 4 cols)
+───────────────────────────────────────────────── */
+.aether-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.aether-project-card {
+  border-radius: var(--radius-inner);
+  overflow: hidden;
+  background: var(--bg-project);
+  border: 1px solid var(--border-subtle);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.aether-project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+}
+
+.aether-project-thumb {
+  height: 148px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.aether-status-badge {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  padding: 3px 7px;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  text-transform: uppercase;
+}
+.aether-status-badge--finished {
+  background: rgba(34,197,94,0.22);
+  border-color: rgba(34,197,94,0.48);
+  color: #6ee7a0;
+}
+
+.aether-project-info {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 16px 16px;
+}
+
+.aether-project-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.aether-project-meta {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 3px;
+  letter-spacing: 0.03em;
+}
+
+.aether-more-btn {
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  padding: 2px;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  transition: color 0.18s ease;
+}
+.aether-more-btn:hover { color: var(--text-primary); }
+
+/* New Project card */
+.aether-new-project-card {
+  border-radius: var(--radius-inner);
+  overflow: hidden;
+  background: var(--bg-project);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 212px;
+  transition: transform 0.22s ease, border-color 0.22s ease;
+}
+.aether-new-project-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.aether-new-project-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.aether-plus-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.55);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.aether-new-project-card:hover .aether-plus-circle {
+  border-color: rgba(255,255,255,0.4);
+  color: #fff;
+}
+
+.aether-new-project-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────────────────────────────
+   Gallery grid  (5 cols)
+───────────────────────────────────────────────── */
+.aether-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.aether-gallery-card { display: flex; flex-direction: column; gap: 10px; }
+
+.aether-gallery-thumb {
+  height: 120px;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--bg-gallery);
+  border: 1px solid var(--border-subtle);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease;
+}
+.aether-gallery-thumb:hover { transform: scale(1.025); }
+
+.aether-heart-btn {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.7);
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.aether-heart-btn:hover {
+  background: rgba(239,68,68,0.65);
+  color: #fff;
+}
+
+.aether-gallery-author {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  padding: 0 4px;
+}
+
+/* ─────────────────────────────────────────────────
+   Footer
+───────────────────────────────────────────────── */
+.aether-footer {
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-subtle);
+  padding: 48px 48px 32px;
+}
+
+.aether-footer-top {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.aether-footer-brand {}
+
+.aether-footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 14px;
+}
+
+.aether-footer-tagline {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  max-width: 260px;
+  margin-bottom: 24px;
+}
+
+.aether-footer-socials {
+  display: flex;
+  gap: 10px;
+}
+
+.aether-social-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+.aether-social-btn:hover {
+  border-color: var(--border-light);
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.08);
+}
+
+.aether-footer-col {}
+
+.aether-footer-col-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.aether-footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.aether-footer-link {
+  font-size: 13px;
+  color: var(--text-muted);
+  transition: color 0.18s ease;
+}
+.aether-footer-link:hover { color: var(--text-primary); }
+
+.aether-footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 28px;
+}
+
+.aether-footer-copy {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+.aether-footer-legal {
+  display: flex;
+  gap: 24px;
+}
+
+.aether-footer-legal a {
+  font-size: 12px;
+  color: var(--text-dim);
+  transition: color 0.18s ease;
+}
+.aether-footer-legal a:hover { color: var(--text-muted); }
+
+/* ─────────────────────────────────────────────────
+   Scrollbar
+───────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-page); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+::selection { background: rgba(255,255,255,0.14); color: var(--text-primary); }
